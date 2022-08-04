@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="platform-utils-js">
+    <output-path>$PROJECT_DIR$/common/platform-utils/build/libs</output-path>
+    <root id="archive" name="platform-utils-js.jar">
+      <element id="module-output" name="MultiPlatformTemplate.common.platform-utils.jsMain" />
+    </root>
+  </artifact>
+</component>
