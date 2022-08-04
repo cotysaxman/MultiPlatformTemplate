@@ -7,6 +7,7 @@ pluginManagement {
     plugins {
         kotlin("multiplatform") version kotlinVersion
         kotlin("android") version kotlinVersion
+        kotlin("jvm") version kotlinVersion
         id("com.android.application") version agpVersion
         id("com.android.library") version agpVersion
         id("org.jetbrains.compose") version composeVersion
@@ -30,4 +31,5 @@ include(
     ":android",
     ":desktop",
     ":web",
+    ":server:ktor:cio",
 )
