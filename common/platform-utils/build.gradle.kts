@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -23,16 +25,16 @@ android {
 }
 
 kotlin {
-    jvm("desktop")
+    jvm()
     android()
     js(IR) {
         browser()
     }
+    nativeTarget("native")
+}
 
-    sourceSets {
-        named("commonMain")
-        named("androidMain")
-        named("desktopMain")
-        named("jsMain")
-    }
+fun KotlinMultiplatformExtension.nativeTarget(name: String) = when (System.getProperty("os.name")) {
+    "Mac OS X" -> macosX64(name)
+    "Linux" -> linuxX64(name)
+    else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
 }

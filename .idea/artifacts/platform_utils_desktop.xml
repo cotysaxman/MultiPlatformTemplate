@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="platform-utils-desktop">
-    <output-path>$PROJECT_DIR$/common/platform-utils/build/libs</output-path>
-    <root id="archive" name="platform-utils-desktop.jar">
-      <element id="module-output" name="MultiPlatformTemplate.common.platform-utils.desktopMain" />
-    </root>
-  </artifact>
-</component>

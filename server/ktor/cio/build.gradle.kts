@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+
 val kotlinVersion: String by project
 val ktorVersion = project.properties["ktor_version"] as String
 val logbackVersion = project.properties["logback_version"] as String
@@ -18,23 +20,15 @@ kotlin {
     jvm {
         withJava()
     }
-
-    watchosSimulatorArm64("shared") // decoy target!
-
-    val nativeTarget = when (System.getProperty("os.name")) {
-        "Mac OS X" -> macosX64("native")
-        "Linux" -> linuxX64("native")
-        // Other supported targets are listed here: https://ktor.io/docs/native-server.html#targets
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-    }
-
-    nativeTarget.apply {
+    nativeTarget("native").apply {
         binaries {
             executable {
                 entryPoint = "com.exawizards.multiplatform_template.server.ktor.cio.main"
             }
         }
     }
+
+    nativeTarget("shared") // decoy target!
 
     sourceSets {
         named("commonMain") {
@@ -48,6 +42,7 @@ kotlin {
             getSharedMainPath().copyRecursively(mkdir(nativeMainPath), overwrite = true)
             kotlin.srcDir(nativeMainPath)
             dependencies {
+                implementation(project(":common:platform-utils"))
                 implementation("io.ktor:ktor-server-core:$ktorVersion")
                 implementation("io.ktor:ktor-server-cio:$ktorVersion")
             }
@@ -63,6 +58,7 @@ kotlin {
             getSharedMainPath().copyRecursively(mkdir(jvmMainPath), overwrite = true)
             kotlin.srcDir(jvmMainPath)
             dependencies {
+                implementation(project(":common:platform-utils"))
                 implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
                 implementation("io.ktor:ktor-server-cio-jvm:$ktorVersion")
             }
@@ -76,11 +72,19 @@ kotlin {
 
         named("sharedMain") {
             dependencies {
+                implementation(project(":common:platform-utils"))
                 implementation("io.ktor:ktor-server-core:$ktorVersion")
                 implementation("io.ktor:ktor-server-cio:$ktorVersion")
             }
         }
     }
+}
+
+fun KotlinMultiplatformExtension.nativeTarget(name: String) = when (System.getProperty("os.name")) {
+    "Mac OS X" -> macosX64(name)
+    "Linux" -> linuxX64(name)
+    // Other supported targets are listed here: https://ktor.io/docs/native-server.html#targets
+    else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
 }
 
 fun getSharedMainPath(): File {
