@@ -4,8 +4,8 @@ import com.exawizards.multiplatform_template.server.ktor.cio.plugins.configureRo
 import io.ktor.server.engine.*
 import io.ktor.server.cio.*
 
-fun main() {
-    embeddedServer(CIO, port = 8080, host = "0.0.0.0") {
+actual fun startServer(port: Int, host: String) {
+    embeddedServer(CIO, port = port, host = host) {
         configureRouting()
     }.start(wait = true)
 }

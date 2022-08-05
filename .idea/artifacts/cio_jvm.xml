@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="cio-jvm">
+    <output-path>$PROJECT_DIR$/server/ktor/cio/build/libs</output-path>
+    <root id="archive" name="cio-jvm.jar">
+      <element id="module-output" name="MultiPlatformTemplate.server.ktor.cio.jvmMain" />
+    </root>
+  </artifact>
+</component>
