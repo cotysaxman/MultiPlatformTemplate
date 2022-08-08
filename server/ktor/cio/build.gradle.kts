@@ -28,67 +28,37 @@ kotlin {
         }
     }
 
-    nativeTarget("shared") // decoy target!
-
     sourceSets {
         named("commonMain") {
             dependencies {
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
-            }
-        }
-        named("commonTest")
-        named("nativeMain") {
-            val nativeMainPath = "build/src/sharedMain/native"
-            getSharedMainPath().copyRecursively(mkdir(nativeMainPath), overwrite = true)
-            kotlin.srcDir(nativeMainPath)
-            dependencies {
                 implementation(project(":common:platform-utils"))
-                implementation("io.ktor:ktor-server-core:$ktorVersion")
-                implementation("io.ktor:ktor-server-cio:$ktorVersion")
+                implementation(project(":server:ktor:configuration"))
+                implementation(project(":server:ktor:configuration:server-utils"))
+                implementation(ktorServerDependency("core", ktorVersion))
+                implementation(ktorServerDependency("cio", ktorVersion))
+                implementation(ktorServerDependency("cors", ktorVersion))
             }
         }
-        named("nativeTest") {
+        named("commonTest") {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("io.ktor:ktor-server-tests:$ktorVersion")
-            }
-        }
-        named("jvmMain") {
-            val jvmMainPath = "build/src/sharedMain/jvm"
-            getSharedMainPath().copyRecursively(mkdir(jvmMainPath), overwrite = true)
-            kotlin.srcDir(jvmMainPath)
-            dependencies {
-                implementation(project(":common:platform-utils"))
-                implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
-                implementation("io.ktor:ktor-server-cio-jvm:$ktorVersion")
-            }
-        }
-        named("jvmTest") {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
-            }
-        }
-
-        named("sharedMain") {
-            dependencies {
-                implementation(project(":common:platform-utils"))
-                implementation("io.ktor:ktor-server-core:$ktorVersion")
-                implementation("io.ktor:ktor-server-cio:$ktorVersion")
+                implementation(ktorServerDependency("tests", ktorVersion))
             }
         }
     }
 }
+
+fun ktorServerDependency(
+    simpleName: String,
+    ktorVersion: String
+) = "io.ktor:ktor-server-$simpleName:$ktorVersion"
 
 fun KotlinMultiplatformExtension.nativeTarget(name: String) = when (System.getProperty("os.name")) {
     "Mac OS X" -> macosX64(name)
     "Linux" -> linuxX64(name)
     // Other supported targets are listed here: https://ktor.io/docs/native-server.html#targets
     else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-}
-
-fun getSharedMainPath(): File {
-    return project.file("src/sharedMain")
 }
 
 repositories {

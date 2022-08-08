@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="js-js">
+    <output-path>$PROJECT_DIR$/server/ktor/client/js/build/libs</output-path>
+    <root id="archive" name="js-js.jar">
+      <element id="module-output" name="MultiPlatformTemplate.server.ktor.client.js.jsMain" />
+    </root>
+  </artifact>
+</component>

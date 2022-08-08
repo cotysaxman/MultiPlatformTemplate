@@ -20,6 +20,12 @@
             <option value="$PROJECT_DIR$/server" />
             <option value="$PROJECT_DIR$/server/ktor" />
             <option value="$PROJECT_DIR$/server/ktor/cio" />
+            <option value="$PROJECT_DIR$/server/ktor/client" />
+            <option value="$PROJECT_DIR$/server/ktor/client/cio" />
+            <option value="$PROJECT_DIR$/server/ktor/client/js" />
+            <option value="$PROJECT_DIR$/server/ktor/configuration" />
+            <option value="$PROJECT_DIR$/server/ktor/configuration/client-utils" />
+            <option value="$PROJECT_DIR$/server/ktor/configuration/server-utils" />
             <option value="$PROJECT_DIR$/web" />
           </set>
         </option>

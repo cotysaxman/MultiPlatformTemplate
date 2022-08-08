@@ -32,4 +32,9 @@ include(
     ":desktop",
     ":web",
     ":server:ktor:cio",
+    ":server:ktor:client:cio",
+    ":server:ktor:client:js",
+    ":server:ktor:configuration",
+    ":server:ktor:configuration:client-utils",
+    ":server:ktor:configuration:server-utils",
 )

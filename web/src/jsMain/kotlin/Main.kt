@@ -1,35 +1,51 @@
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import com.exawizards.multiplatform_template.platform_utils.getPlatformName
+import com.exawizards.multiplatform_template.server.ktor.client.js.Client.from
+import com.exawizards.multiplatform_template.server.ktor.configuration.Configuration
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
 
 fun main() {
-    var count: Int by mutableStateOf(0)
-
     renderComposable(rootElementId = "root") {
-        Div({ style { padding(25.px) } }) {
-            Button(attrs = {
-                onClick { count -= 1 }
-            }) {
-                Text("-")
-            }
-
-            Span({ style { padding(15.px) } }) {
-                Text("$count")
-            }
-
-            Button(attrs = {
-                onClick { count += 1 }
-            }) {
-                Text("+")
-            }
-        }
-        Div({ style { padding(25.px) } }) {
-            Text("Running on ${getPlatformName()}")
-        }
+        App()
     }
 }
 
+@Composable
+fun App() {
+    var count: Int by mutableStateOf(0)
+    val rootResponse = remember {
+        mutableStateOf("Requesting...")
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+    coroutineScope.launch {
+        rootResponse.value = from(Configuration.Routes.Root)
+    }
+
+    Div({ style { padding(25.px) } }) {
+        Button(attrs = {
+            onClick { count -= 1 }
+        }) {
+            Text("-")
+        }
+
+        Span({ style { padding(15.px) } }) {
+            Text("$count")
+        }
+
+        Button(attrs = {
+            onClick { count += 1 }
+        }) {
+            Text("+")
+        }
+    }
+    Div({ style { padding(25.px) } }) {
+        Text("Running on ${getPlatformName()}")
+    }
+    Div({ style { padding(25.px) } }) {
+        Text("Server says: ${rootResponse.value}")
+    }
+}
