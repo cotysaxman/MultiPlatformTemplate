@@ -7,6 +7,7 @@ import com.exawizards.multiplatform_template.server.ktor.configuration.Configura
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.util.*
 
 fun Application.configureRouting(state: State) {
     routing {
@@ -19,7 +20,15 @@ private fun Routing.configureRoute(route: Routes, serverState: State) = when (ro
         call.respondText("Hello World from ${getPlatformName()}!")
     }
     Routes.List -> dsl(route) {
-        call.respondText(serverState.storage.memoryStorage.map(Record::content).joinToString("\n"))
+        call.respondText(serverState.getList())
+    }
+    Routes.AddItem -> dsl(route) {
+        val content = call.parameters.getOrFail<String>("content")
+        serverState.storage.add(content)
+
+        call.respondText(serverState.getList())
     }
     else -> throw IllegalArgumentException("$route does not exist")
 }
+
+private fun State.getList() = storage.memoryStorage.map(Record::content).joinToString("\n")

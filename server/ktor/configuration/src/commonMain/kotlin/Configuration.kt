@@ -8,6 +8,7 @@ object Configuration {
     enum class Routes(val path: String, val method: Http, val responseType: ResponseType) {
         Root("/", Http.GET, ResponseType.TEXT),
         List("/items", Http.GET, ResponseType.TEXT),
+        AddItem("/items", Http.POST, ResponseType.TEXT)
         ;
 
         val fullPath = "http://${host}:${port}$path"

@@ -8,5 +8,7 @@ import io.ktor.client.engine.js.*
 object Client {
     private val instance = HttpClient(Js)
 
-    suspend fun from(route: Routes) = instance.request(route)
+    suspend fun get(route: Routes) = instance.request(route)
+    suspend fun post(route: Routes, parameters: List<Pair<String, String>>) =
+        instance.request(route, parameters)
 }
