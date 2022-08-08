@@ -6,7 +6,9 @@ object Configuration {
     const val host: String = "0.0.0.0"
 
     enum class Routes(val path: String, val method: Http, val responseType: ResponseType) {
-        Root("/", Http.GET, ResponseType.TEXT);
+        Root("/", Http.GET, ResponseType.TEXT),
+        List("/items", Http.GET, ResponseType.TEXT),
+        ;
 
         val fullPath = "http://${host}:${port}$path"
 

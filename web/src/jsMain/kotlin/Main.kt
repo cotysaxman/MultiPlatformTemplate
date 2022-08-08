@@ -19,10 +19,16 @@ fun App() {
     val rootResponse = remember {
         mutableStateOf("Requesting...")
     }
+    val listResponse = remember {
+        mutableStateOf(emptyList<String>())
+    }
 
     val coroutineScope = rememberCoroutineScope()
     coroutineScope.launch {
         rootResponse.value = from(Configuration.Routes.Root)
+    }
+    coroutineScope.launch {
+        listResponse.value = from(Configuration.Routes.List).split("\n")
     }
 
     Div({ style { padding(25.px) } }) {
@@ -47,5 +53,13 @@ fun App() {
     }
     Div({ style { padding(25.px) } }) {
         Text("Server says: ${rootResponse.value}")
+    }
+    Div({ style { padding(25.px) } }) {
+        Text("List from the server:")
+        listResponse.value.forEach { listItem ->
+            Div({ style { padding(5.px) } }) {
+                Text(listItem)
+            }
+        }
     }
 }

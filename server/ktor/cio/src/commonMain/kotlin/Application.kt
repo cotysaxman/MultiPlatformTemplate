@@ -1,5 +1,6 @@
 package com.exawizards.multiplatform_template.server.ktor.cio
 
+import com.exawizards.multiplatform_template.server.ktor.cio.plugins.Storage
 import com.exawizards.multiplatform_template.server.ktor.configuration.Configuration
 import com.exawizards.multiplatform_template.server.ktor.cio.plugins.configureRouting
 import io.ktor.http.HttpHeaders
@@ -18,6 +19,10 @@ fun main() {
             anyHost()
             allowHeader(HttpHeaders.ContentType)
         }
-        configureRouting()
+        configureRouting(State(Storage()))
     }.start(wait = true)
 }
+
+data class State(
+    val storage: Storage
+)

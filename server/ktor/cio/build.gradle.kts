@@ -29,17 +29,17 @@ kotlin {
     }
 
     sourceSets {
-        named("commonMain") {
-            dependencies {
-                implementation("ch.qos.logback:logback-classic:$logbackVersion")
-                implementation(project(":common:platform-utils"))
-                implementation(project(":server:ktor:configuration"))
-                implementation(project(":server:ktor:configuration:server-utils"))
-                implementation(ktorServerDependency("core", ktorVersion))
-                implementation(ktorServerDependency("cio", ktorVersion))
-                implementation(ktorServerDependency("cors", ktorVersion))
-            }
+        val commonMain by getting
+        commonMain.dependencies {
+            implementation("ch.qos.logback:logback-classic:$logbackVersion")
+            implementation(project(":common:platform-utils"))
+            implementation(project(":server:ktor:configuration"))
+            implementation(project(":server:ktor:configuration:server-utils"))
+            implementation(ktorServerDependency("core", ktorVersion))
+            implementation(ktorServerDependency("cio", ktorVersion))
+            implementation(ktorServerDependency("cors", ktorVersion))
         }
+
         named("commonTest") {
             dependencies {
                 implementation(kotlin("test"))
