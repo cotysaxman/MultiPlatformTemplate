@@ -13,7 +13,7 @@ fun Application.mainModule() {
     suspend fun getList(): TodoList = suspend { storage.getTodoList() }()
 
     routing {
-        object : RouteMap<Route> {
+        object : RouteContract<Route> {
             override val root = handleRequest(Routes.root)
                 .respondWith { PlainText("Hello World from ${getPlatformName()}!") }
 

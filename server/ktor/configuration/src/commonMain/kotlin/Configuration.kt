@@ -7,6 +7,25 @@ object Configuration {
     const val host: String = "0.0.0.0"
 }
 
+object Routes : RouteContract<HttpRequest<out Model, out Model>> {
+    override val root = get<PlainText>("/")
+    override val todoList = get<TodoList>("/items")
+    override val addItem = post<TodoItem, TodoList>("/items")
+
+    private inline fun <reified OUTPUT : Model> get(
+        path: String
+    ) = object : Get<OUTPUT> {
+        override val path = path
+    }
+
+    private inline fun <reified INPUT : Model, reified  OUTPUT : Model> post(
+        path: String
+    ) = object : Post<INPUT, OUTPUT> {
+        override val path = path
+    }
+}
+
+
 sealed class Model
 @Serializable
 data class TodoItem(val title: String) : Model()

@@ -50,7 +50,7 @@ fun <T : HttpClientEngineConfig> getClient(engine: HttpClientEngineFactory<T>) =
 
 class WrappedClient(
     instance: HttpClient
-) : RouteMap<Endpoint<out Model, out Model>> {
+) : RouteContract<Endpoint<out Model, out Model>> {
     override val root = Endpoint(Routes.root, instance)
     override val todoList = Endpoint(Routes.todoList, instance)
     override val addItem = Endpoint(Routes.addItem, instance)
