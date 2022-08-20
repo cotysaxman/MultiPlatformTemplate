@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 val ktorVersion = project.properties["ktor_version"] as String
+val serializationJsonVersion: String by project
 
 plugins {
     kotlin("multiplatform")
@@ -38,6 +39,9 @@ kotlin {
         named("commonMain") {
             dependencies {
                 implementation(project(":server:ktor:configuration"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationJsonVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
             }
         }

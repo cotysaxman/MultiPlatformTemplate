@@ -36,6 +36,7 @@ kotlin {
             dependencies {
                 implementation(project(":common:platform-utils"))
                 implementation(project(":server:ktor:configuration"))
+                implementation(project(":server:ktor:configuration:client-utils"))
                 implementation(ktorClientDependency("core", ktorVersion))
                 implementation(ktorClientDependency("cio", ktorVersion))
             }

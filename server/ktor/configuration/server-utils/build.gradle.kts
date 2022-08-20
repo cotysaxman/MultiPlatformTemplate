@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 val ktorVersion = project.properties["ktor_version"] as String
+val serializationJsonVersion: String by project
 
 plugins {
     kotlin("multiplatform")
-    application
 }
 
 kotlin {
@@ -16,6 +16,7 @@ kotlin {
             dependencies {
                 implementation(project(":common:platform-utils"))
                 implementation(project(":server:ktor:configuration"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationJsonVersion")
                 implementation(ktorServerDependency("core", ktorVersion))
             }
         }

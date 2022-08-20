@@ -1,9 +1,11 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 val ktorVersion = project.properties["ktor_version"] as String
+val serializationJsonVersion: String by project
 
 plugins {
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
     id("com.android.library")
 }
 
@@ -33,6 +35,14 @@ kotlin {
         browser()
     }
     nativeTarget("native")
+
+    sourceSets {
+        named("commonMain") {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationJsonVersion")
+            }
+        }
+    }
 }
 
 fun KotlinMultiplatformExtension.nativeTarget(name: String) = when (System.getProperty("os.name")) {

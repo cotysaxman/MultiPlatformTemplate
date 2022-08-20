@@ -1,8 +1,9 @@
 import androidx.compose.runtime.*
 import com.exawizards.multiplatform_template.platform_utils.getPlatformName
-import com.exawizards.multiplatform_template.server.ktor.client.js.Client.get
-import com.exawizards.multiplatform_template.server.ktor.client.js.Client.post
-import com.exawizards.multiplatform_template.server.ktor.configuration.Configuration
+import com.exawizards.multiplatform_template.server.ktor.client.js.client
+import com.exawizards.multiplatform_template.server.ktor.configuration.TodoItem
+import com.exawizards.multiplatform_template.server.ktor.configuration.TodoList
+import com.exawizards.multiplatform_template.server.ktor.configuration.client_utils.invoke
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.*
@@ -20,8 +21,8 @@ fun App() {
     var rootResponse: String by remember {
         mutableStateOf("Requesting...")
     }
-    var listResponse: List<String> by remember {
-        mutableStateOf(emptyList())
+    var todoList: TodoList by remember {
+        mutableStateOf(TodoList(emptyList()))
     }
     var itemToAdd: String by remember {
         mutableStateOf("")
@@ -29,10 +30,10 @@ fun App() {
 
     val coroutineScope = rememberCoroutineScope()
     coroutineScope.launch {
-        rootResponse = get(Configuration.Routes.Root)
+        rootResponse = client.root().content
     }
     coroutineScope.launch {
-        listResponse = get(Configuration.Routes.List).split("\n")
+        todoList = client.todoList()
     }
 
     Div({ style { padding(25.px) } }) {
@@ -43,9 +44,9 @@ fun App() {
     }
     Div({ style { padding(25.px) } }) {
         Text("List from the server:")
-        listResponse.forEach { listItem ->
+        todoList.items.forEach { listItem ->
             Div({ style { padding(5.px) } }) {
-                Text(listItem)
+                Text(listItem.title)
             }
         }
     }
@@ -58,9 +59,8 @@ fun App() {
         Button(attrs = {
             onClick {
                 coroutineScope.launch {
-                    listResponse = post(Configuration.Routes.AddItem,
-                        listOf("content" to itemToAdd)
-                    ).split("\n")
+                    todoList = client.addItem(TodoItem(itemToAdd))
+                    itemToAdd = ""
                 }
             }
         }) {

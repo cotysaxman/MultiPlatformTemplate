@@ -1,15 +1,17 @@
 package com.exawizards.multiplatform_template.server.ktor.cio.plugins
 
-class Storage {
-    var memoryStorage = listOf(
-        "default first entry",
-        "and a second",
-    ).map(::Record)
-        private set
+import com.exawizards.multiplatform_template.server.ktor.configuration.TodoItem
+import com.exawizards.multiplatform_template.server.ktor.configuration.TodoList
 
-    fun add(item: String) {
-        memoryStorage = memoryStorage + Record(item)
+class Storage {
+    fun getTodoList() = TodoList(memoryStorage)
+
+    private var memoryStorage = listOf(
+        TodoItem("first default item"),
+        TodoItem("and a second"),
+    )
+
+    fun add(item: TodoItem) {
+        memoryStorage = memoryStorage + item
     }
 }
-
-data class Record(val content: String)

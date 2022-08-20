@@ -46,7 +46,7 @@ kotlin {
 
         named("androidMain") {
             dependencies {
-                implementation("androidx.appcompat:appcompat:1.4.2")
+                implementation("androidx.appcompat:appcompat:1.5.0")
                 implementation("androidx.core:core-ktx:1.8.0")
             }
         }

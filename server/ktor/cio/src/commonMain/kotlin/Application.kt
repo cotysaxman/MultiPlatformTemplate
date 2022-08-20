@@ -1,13 +1,15 @@
 package com.exawizards.multiplatform_template.server.ktor.cio
 
-import com.exawizards.multiplatform_template.server.ktor.cio.plugins.Storage
 import com.exawizards.multiplatform_template.server.ktor.configuration.Configuration
-import com.exawizards.multiplatform_template.server.ktor.cio.plugins.configureRouting
-import io.ktor.http.HttpHeaders
+import com.exawizards.multiplatform_template.server.ktor.cio.plugins.mainModule
+import io.ktor.http.*
 import io.ktor.server.application.install
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.CORS
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 
 fun main() {
     embeddedServer(
@@ -19,10 +21,12 @@ fun main() {
             anyHost()
             allowHeader(HttpHeaders.ContentType)
         }
-        configureRouting(State(Storage()))
+        install(ContentNegotiation) {
+            json(Json {
+                prettyPrint = true
+                isLenient = true
+            })
+        }
+        mainModule()
     }.start(wait = true)
 }
-
-data class State(
-    val storage: Storage
-)

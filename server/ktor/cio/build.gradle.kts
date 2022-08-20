@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 val kotlinVersion: String by project
 val ktorVersion = project.properties["ktor_version"] as String
 val logbackVersion = project.properties["logback_version"] as String
+val serializationJsonVersion: String by project
 
 plugins {
     kotlin("multiplatform")
@@ -32,18 +33,20 @@ kotlin {
         val commonMain by getting
         commonMain.dependencies {
             implementation("ch.qos.logback:logback-classic:$logbackVersion")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationJsonVersion")
             implementation(project(":common:platform-utils"))
             implementation(project(":server:ktor:configuration"))
             implementation(project(":server:ktor:configuration:server-utils"))
             implementation(ktorServerDependency("core", ktorVersion))
             implementation(ktorServerDependency("cio", ktorVersion))
             implementation(ktorServerDependency("cors", ktorVersion))
+            implementation(ktorServerDependency("content-negotiation", ktorVersion))
+            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
         }
-
         named("commonTest") {
             dependencies {
                 implementation(kotlin("test"))
-                implementation(ktorServerDependency("tests", ktorVersion))
+                implementation(ktorServerDependency("test-host", ktorVersion))
             }
         }
     }
