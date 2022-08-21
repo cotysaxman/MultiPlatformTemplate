@@ -4,22 +4,8 @@ plugins {
     kotlin("android")
 }
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation(project(":common:compose-ui"))
-    implementation("androidx.activity:activity-compose:1.5.1")
-    implementation("androidx.appcompat:appcompat:1.4.2")
-
-    debugImplementation(compose.uiTooling)
-    implementation(compose.preview)
-    implementation(compose.material)
-}
-
 android {
-    compileSdk = 31
+    compileSdk = 32
     @Suppress("UnstableApiUsage")
     buildToolsVersion = "33.0.0"
     @Suppress("UnstableApiUsage")
@@ -44,4 +30,20 @@ android {
             res.srcDirs("src/main/res")
         }
     }
+
+    @Suppress("UnstableApiUsage")
+    composeOptions {
+        val composeCompilerVersion: String by project
+        kotlinCompilerExtensionVersion = composeCompilerVersion
+    }
+}
+
+dependencies {
+    val activityComposeVersion: String by project
+    val composeAndroidxVersion: String by project
+
+    implementation(project(":common:compose-ui"))
+    implementation("androidx.activity:activity-compose:$activityComposeVersion")
+
+    implementation("androidx.compose.ui:ui-tooling:$composeAndroidxVersion")
 }

@@ -1,9 +1,9 @@
 package com.exawizards.multiplatform_template.compose_ui
 
+import com.exawizards.multiplatform_template.platform_utils.getPlatformName
+import androidx.compose.runtime.Composable
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import com.exawizards.multiplatform_template.platform_utils.getPlatformName
 
 @Composable
 fun App() {

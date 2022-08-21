@@ -10,6 +10,7 @@ allprojects {
         mavenCentral()
         mavenLocal()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://androidx.dev/storage/compose-compiler/repository/")
     }
 
     plugins.withType(NodeJsRootPlugin::class.java) {

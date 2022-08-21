@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     @Suppress("UnstableApiUsage")
     buildToolsVersion = "33.0.0"
     @Suppress("UnstableApiUsage")

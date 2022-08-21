@@ -1,18 +1,49 @@
 import org.jetbrains.compose.compose
 
 plugins {
+    id("org.jetbrains.compose")
     id("com.android.library")
     kotlin("multiplatform")
-    id("org.jetbrains.compose")
 }
 
-dependencies {
-    debugImplementation(compose.uiTooling)
-    implementation(compose.preview)
+kotlin {
+    android()
+    jvm("desktop")
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(project(":common:platform-utils"))
+                api(compose.runtime)
+                api(compose.foundation)
+                api(compose.material)
+            }
+        }
+
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.preview)
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                val appCompatVersion: String by project
+                val composeAndroidxVersion: String by project
+
+                api("androidx.appcompat:appcompat:$appCompatVersion")
+                api("androidx.core:core-ktx:1.8.0")
+                api("androidx.compose.runtime:runtime:$composeAndroidxVersion")
+                api("androidx.compose.foundation:foundation:$composeAndroidxVersion")
+                api("androidx.compose.material:material:$composeAndroidxVersion")
+                implementation("androidx.compose.ui:ui-tooling:$composeAndroidxVersion")
+            }
+        }
+    }
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     @Suppress("UnstableApiUsage")
     buildToolsVersion = "33.0.0"
     @Suppress("UnstableApiUsage")
@@ -28,33 +59,15 @@ android {
             res.srcDirs("src/androidMain/resources")
         }
     }
-}
 
-kotlin {
-    jvm("desktop")
-    android()
+    @Suppress("UnstableApiUsage")
+    buildFeatures {
+        compose = true
+    }
 
-    sourceSets {
-        named("commonMain") {
-            dependencies {
-                implementation(project(":common:platform-utils"))
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material)
-            }
-        }
-
-        named("androidMain") {
-            dependencies {
-                implementation("androidx.appcompat:appcompat:1.5.0")
-                implementation("androidx.core:core-ktx:1.8.0")
-            }
-        }
-
-        named("desktopMain") {
-            dependencies {
-                implementation(compose.desktop.common)
-            }
-        }
+    @Suppress("UnstableApiUsage")
+    composeOptions {
+        val composeCompilerVersion: String by project
+        kotlinCompilerExtensionVersion = composeCompilerVersion
     }
 }

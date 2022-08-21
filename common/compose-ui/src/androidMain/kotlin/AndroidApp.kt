@@ -5,6 +5,6 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable
-fun Preview_App() {
+private fun Preview_App() {
     App()
 }
