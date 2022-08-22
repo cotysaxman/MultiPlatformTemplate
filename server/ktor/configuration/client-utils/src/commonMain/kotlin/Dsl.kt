@@ -29,10 +29,10 @@ data class Endpoint<INPUT, OUTPUT>(
 
         return response.body()
     }
-
-    val HttpRequest<*, *>.fullPath: String
-        get() = "http://${Configuration.host}:${Configuration.port}${path}"
 }
+
+val HttpRequest<*, *>.fullPath: String
+    get() = "http://${Configuration.host}:${Configuration.port}${path}"
 
 suspend inline operator fun <reified OUTPUT : Model> Endpoint<None, OUTPUT>.invoke(): OUTPUT =
     invoke(None)

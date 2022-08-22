@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 object Configuration {
     const val port: Int = 8081
     const val host: String = "0.0.0.0"
+//    const val host: String = "10.0.2.2" // required for Android runs!
 }
 
 object Routes : RouteContract<HttpRequest<out Model, out Model>> {

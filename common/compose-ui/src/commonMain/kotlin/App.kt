@@ -1,8 +1,6 @@
 package com.exawizards.multiplatform_template.compose_ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Button
 import com.exawizards.multiplatform_template.platform_utils.getPlatformName
 import com.exawizards.multiplatform_template.server.ktor.client.cio.client
 import com.exawizards.multiplatform_template.server.ktor.configuration.TodoItem
@@ -10,7 +8,6 @@ import com.exawizards.multiplatform_template.server.ktor.configuration.TodoList
 import com.exawizards.multiplatform_template.server.ktor.configuration.client_utils.invoke
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.EmptyCoroutineContext
@@ -41,13 +38,13 @@ fun App() {
 }
 
 @Composable
-fun PlatformInfo() {
+private fun PlatformInfo() {
     val platformName = getPlatformName()
     Text("Running on $platformName")
 }
 
 @Composable
-fun ServerInfo() {
+private fun ServerInfo() {
     var rootResponse: String by remember {
         mutableStateOf("Requesting...")
     }
@@ -59,34 +56,10 @@ fun ServerInfo() {
 }
 
 @Composable
-fun TodoList(state: TodoList) {
+private fun TodoList(state: TodoList) {
     Column {
         state.items.forEach { listItem ->
             Text(listItem.title)
-        }
-    }
-}
-
-@Composable
-fun AddNewItem(addItem: (String) -> Unit) {
-    var itemToAdd: String by remember {
-        mutableStateOf("")
-    }
-    Row {
-        Text("Add new item:")
-        TextField(
-            itemToAdd,
-            onValueChange = {
-                itemToAdd = it
-            }
-        )
-        Button(
-            onClick = {
-                addItem(itemToAdd)
-                itemToAdd = ""
-            }
-        ) {
-            Text("Add")
         }
     }
 }
