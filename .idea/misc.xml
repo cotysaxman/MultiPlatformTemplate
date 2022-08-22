@@ -20,6 +20,7 @@
   <component name="SuppressABINotification">
     <option name="modulesWithSuppressedNotConfigured">
       <set>
+        <option value="MultiPlatformTemplate.common.compose-ui" />
         <option value="MultiPlatformTemplate.common.platform-utils" />
       </set>
     </option>

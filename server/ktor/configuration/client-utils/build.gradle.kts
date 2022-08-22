@@ -38,23 +38,23 @@ kotlin {
     sourceSets {
         named("commonMain") {
             dependencies {
-                implementation(project(":server:ktor:configuration"))
+                api(project(":server:ktor:configuration"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationJsonVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation(ktorClientDependency("core", ktorVersion))
+                api(ktorClientDependency("content-negotiation", ktorVersion))
             }
         }
     }
 }
 
+fun ktorClientDependency(
+    simpleName: String,
+    ktorVersion: String
+) = "io.ktor:ktor-client-$simpleName:$ktorVersion"
+
 fun KotlinMultiplatformExtension.nativeTarget(name: String) = when (System.getProperty("os.name")) {
     "Mac OS X" -> macosX64(name)
     "Linux" -> linuxX64(name)
     else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-}
-
-repositories {
-    mavenCentral()
-    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }

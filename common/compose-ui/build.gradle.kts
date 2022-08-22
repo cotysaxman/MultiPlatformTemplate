@@ -14,15 +14,18 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":common:platform-utils"))
+                api(project(":server:ktor:client:cio"))
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+                api(compose.ui)
             }
         }
 
         val desktopMain by getting {
             dependencies {
                 implementation(compose.preview)
+                implementation(compose.uiTooling)
             }
         }
 
@@ -36,6 +39,7 @@ kotlin {
                 api("androidx.compose.runtime:runtime:$composeAndroidxVersion")
                 api("androidx.compose.foundation:foundation:$composeAndroidxVersion")
                 api("androidx.compose.material:material:$composeAndroidxVersion")
+                api("androidx.compose.ui:ui:$composeAndroidxVersion")
                 implementation("androidx.compose.ui:ui-tooling:$composeAndroidxVersion")
             }
         }

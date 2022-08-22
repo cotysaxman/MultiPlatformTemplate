@@ -34,10 +34,7 @@ kotlin {
     sourceSets {
         named("commonMain") {
             dependencies {
-                implementation(project(":common:platform-utils"))
-                implementation(project(":server:ktor:configuration"))
-                implementation(project(":server:ktor:configuration:client-utils"))
-                implementation(ktorClientDependency("core", ktorVersion))
+                api(project(":server:ktor:configuration:client-utils"))
                 implementation(ktorClientDependency("cio", ktorVersion))
             }
         }
@@ -54,9 +51,4 @@ fun KotlinMultiplatformExtension.nativeTarget(name: String) = when (System.getPr
     "Linux" -> linuxX64(name)
     // Other supported targets are listed here: https://ktor.io/docs/native-server.html#targets
     else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
-}
-
-repositories {
-    mavenCentral()
-    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
