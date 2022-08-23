@@ -5,12 +5,12 @@ import com.exawizards.multiplatform_template.platform_utils.getPlatformName
 import com.exawizards.multiplatform_template.server.ktor.client.cio.client
 import com.exawizards.multiplatform_template.server.ktor.configuration.TodoItem
 import com.exawizards.multiplatform_template.server.ktor.configuration.TodoList
-import com.exawizards.multiplatform_template.server.ktor.configuration.client_utils.invoke
+import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.addItem
+import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.root
+import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.todoList
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
 fun App() {
@@ -18,19 +18,18 @@ fun App() {
         topBar = { PlatformInfo() },
         bottomBar = { ServerInfo() }
     ) {
-        val coroutineScope = rememberCoroutineScope()
         var todoList: TodoList by remember {
             mutableStateOf(TodoList(emptyList()))
         }
-        LaunchedEffect(Unit) {
-            todoList = client.todoList()
+        client.launch {
+            todoList = todoList()
         }
 
         Column {
             TodoList(todoList)
             AddNewItem { itemText ->
-                coroutineScope.launch(EmptyCoroutineContext) {
-                    todoList = client.addItem(TodoItem(itemText))
+                client.launch {
+                    todoList = addItem(TodoItem(itemText))
                 }
             }
         }
@@ -48,8 +47,8 @@ private fun ServerInfo() {
     var rootResponse: String by remember {
         mutableStateOf("Requesting...")
     }
-    LaunchedEffect(Unit) {
-        rootResponse = client.root().content
+    client.launch {
+        rootResponse = root().content
     }
 
     Text("Server says: $rootResponse")
