@@ -1,10 +1,11 @@
 import androidx.compose.runtime.*
 import com.exawizards.multiplatform_template.platform_utils.getPlatformName
 import com.exawizards.multiplatform_template.server.ktor.client.js.client
+import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.addItem
+import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.root
+import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.todoList
 import com.exawizards.multiplatform_template.server.ktor.configuration.TodoItem
 import com.exawizards.multiplatform_template.server.ktor.configuration.TodoList
-import com.exawizards.multiplatform_template.server.ktor.configuration.client_utils.invoke
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.padding
 import org.jetbrains.compose.web.css.px
@@ -15,22 +16,21 @@ import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun App() {
-    var todoList: TodoList by remember {
+    var listState: TodoList by remember {
         mutableStateOf(TodoList(emptyList()))
     }
 
-    val coroutineScope = rememberCoroutineScope()
-    coroutineScope.launch {
-        todoList = client.todoList()
+    client.launch {
+        listState = todoList()
     }
 
     PlatformInfo()
     ServerInfo()
-    TodoList(todoList)
+    TodoList(listState)
 
     AddNewItem {
-        coroutineScope.launch {
-            todoList = client.addItem(TodoItem(it))
+        client.launch {
+            listState = addItem(TodoItem(it))
         }
     }
 }
@@ -56,12 +56,11 @@ fun TodoList(state: TodoList) {
 
 @Composable
 fun ServerInfo() {
-    val coroutineScope = rememberCoroutineScope()
     var rootResponse: String by remember {
         mutableStateOf("Requesting...")
     }
-    coroutineScope.launch {
-        rootResponse = client.root().content
+    client.launch {
+        rootResponse = root().content
     }
 
     Div({ style { padding(25.px) } }) {

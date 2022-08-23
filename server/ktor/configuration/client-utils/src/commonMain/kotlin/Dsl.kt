@@ -10,32 +10,10 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.json.*
 import io.ktor.serialization.kotlinx.json.*
-
-data class Endpoint<INPUT, OUTPUT>(
-    val route: HttpRequest<INPUT, OUTPUT>,
-    val client: HttpClient
-) {
-    suspend inline operator fun <reified T : INPUT, reified R : OUTPUT> invoke(
-        input: T
-    ): R {
-        val response = when (route) {
-            is Get<*> -> client.get(route.fullPath)
-            is Post<*, *> -> client.post(route.fullPath) {
-                contentType(ContentType.Application.Json)
-                setBody(input)
-            }
-            else -> throw IllegalArgumentException("Unrecognized HttpMethod in client configuration.")
-        }
-
-        return response.body()
-    }
-}
+import kotlinx.coroutines.launch
 
 val HttpRequest<*, *>.fullPath: String
     get() = "http://${Configuration.host}:${Configuration.port}${path}"
-
-suspend inline operator fun <reified OUTPUT : Model> Endpoint<None, OUTPUT>.invoke(): OUTPUT =
-    invoke(None)
 
 fun <T : HttpClientEngineConfig> getClient(engine: HttpClientEngineFactory<T>) = WrappedClient(
     HttpClient(engine) {
@@ -49,9 +27,19 @@ fun <T : HttpClientEngineConfig> getClient(engine: HttpClientEngineFactory<T>) =
 )
 
 class WrappedClient(
-    instance: HttpClient
-) : RouteContract<Endpoint<out Model, out Model>> {
-    override val root = Endpoint(Routes.root, instance)
-    override val todoList = Endpoint(Routes.todoList, instance)
-    override val addItem = Endpoint(Routes.addItem, instance)
+    val client: HttpClient
+) {
+    fun launch(block: suspend WrappedClient.() -> Unit) = client.launch {
+        block()
+    }
+
+    suspend inline operator fun <reified T : Model> Get<T>.invoke(): T =
+        client.get(fullPath).body()
+
+    suspend inline operator fun <reified INPUT : Model, reified OUTPUT : Model> Post<INPUT, OUTPUT>.invoke(
+        input: INPUT
+    ): OUTPUT = client.post(fullPath) {
+        contentType(ContentType.Application.Json)
+        setBody(input)
+    }.body()
 }
