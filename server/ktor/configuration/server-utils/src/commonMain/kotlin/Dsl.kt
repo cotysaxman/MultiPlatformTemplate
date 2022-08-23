@@ -25,7 +25,7 @@ sealed class WrappedRoute<INPUT : Model, OUTPUT : Model>(
     ) : WrappedRoute<None, OUTPUT>(route) {
         fun doFirst(
             body: PipelineInterceptor<Unit, ApplicationCall>
-        ): Get<in OUTPUT> = Get(
+        ): Get<OUTPUT> = Get(
             route.apply {
                 handle(body)
             }
@@ -49,14 +49,21 @@ sealed class WrappedRoute<INPUT : Model, OUTPUT : Model>(
     }
 }
 
-inline fun <reified INPUT : Model, reified OUTPUT : Model> Route.handleRequest(
-    request: Post<out INPUT, out OUTPUT>
-) = WrappedRoute.Post<INPUT, OUTPUT>(route(request.path, HttpMethod.Post) {}, INPUT::class)
+inline fun <reified INPUT : Model, reified OUTPUT : Model> RoutingScope.handleRequest(
+    request: Post<INPUT, OUTPUT>
+) = WrappedRoute.Post<INPUT, OUTPUT>(routeContext.route(request.path, HttpMethod.Post) {}, INPUT::class)
 
-inline fun <reified OUTPUT : Model> Route.handleRequest(
-    request: Get<out OUTPUT>
-) = WrappedRoute.Get<OUTPUT>(route(request.path, HttpMethod.Get) {})
+inline fun <reified OUTPUT : Model> RoutingScope.handleRequest(
+    request: Get<OUTPUT>
+) = WrappedRoute.Get<OUTPUT>(routeContext.route(request.path, HttpMethod.Get) {})
 
+fun Route.routingScope() = RoutingScope(this)
+class RoutingScope(val routeContext: Route) : RouteContract<HttpRequest<out Model, out Model>> by Routes
+fun Application.configureRoutes(block: RoutingScope.() -> Unit) {
+    routing {
+        block(routingScope())
+    }
+}
 
 val HttpRequest<*, *>.method: HttpMethod
     get() = when (this) {
