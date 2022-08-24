@@ -14,27 +14,31 @@ import androidx.compose.runtime.*
 
 @Composable
 fun App() {
+    val appState = getAppState()
+
     Scaffold(
         topBar = { PlatformInfo() },
         bottomBar = { ServerInfo() }
     ) {
-        var todoList: TodoList by remember {
-            mutableStateOf(TodoList(emptyList()))
-        }
         client.launch {
-            todoList = todoList()
+            appState.value = todoList()
         }
 
         Column {
-            TodoList(todoList)
+            TodoList(appState::value)
             AddNewItem { itemText ->
                 client.launch {
-                    todoList = addItem(TodoItem(itemText))
+                    appState.value = addItem(TodoItem(itemText))
                 }
             }
         }
     }
 }
+
+@Composable
+private fun getAppState(
+    list: TodoList = TodoList(emptyList())
+) = mutableStateOf(list)
 
 @Composable
 private fun PlatformInfo() {
@@ -55,9 +59,9 @@ private fun ServerInfo() {
 }
 
 @Composable
-private fun TodoList(state: TodoList) {
+private fun TodoList(provider: () -> TodoList) {
     Column {
-        state.items.forEach { listItem ->
+        provider().items.forEach { listItem ->
             Text(listItem.title)
         }
     }
