@@ -7,59 +7,61 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
-import kotlin.reflect.KClass
 
-sealed class WrappedRoute<INPUT : Model, OUTPUT : Model>(
-    val route: Route
-) {
-    inline fun <reified R : OUTPUT> respondWith(
-        crossinline responseProvider: suspend () -> R
-    ) = route.apply {
-        handle {
-            call.respond(responseProvider())
+interface RouteWrapper { val routeBuilder: Route }
+interface Fun2Route<IN : Model, OUT : Model> : Fun0Route<OUT>, Receiver<IN>
+interface Fun1Route<OUT : Model> : Fun0Route<OUT>, NonReceiver
+interface Fun0Route<OUT : Model> : RouteWrapper, Provider<OUT>
+
+class RouteConfigurationScope(val scope: Route) {
+    inline fun <reified OUTPUT : Model> Fun1Route<OUTPUT>.doFirst(
+        crossinline block: PipelineInterceptor<Unit, ApplicationCall>
+    ) = apply { routeBuilder.apply { handle { block(Unit) } } }
+
+    inline fun <
+        reified INPUT : Model,
+        reified OUTPUT : Model
+    > Fun2Route<INPUT, OUTPUT>.doFirst(
+        crossinline body: suspend PipelineContext<Unit, ApplicationCall>.(INPUT) -> Unit
+    ) = apply {
+        routeBuilder.apply {
+            handle {
+                val input = call.receive(INPUT::class)
+                body(input)
+            }
         }
     }
 
-    class Get<OUTPUT : Model>(
-        route: Route
-    ) : WrappedRoute<None, OUTPUT>(route) {
-        fun doFirst(
-            body: PipelineInterceptor<Unit, ApplicationCall>
-        ): Get<OUTPUT> = Get(
-            route.apply {
-                handle(body)
+    inline fun <reified OUTPUT : Model> Fun0Route<OUTPUT>.respondWith(
+        crossinline responseProvider: suspend () -> OUTPUT
+    ) = apply {
+        routeBuilder.apply {
+            handle {
+                call.respond(responseProvider())
             }
-        )
+        }
     }
 
-    class Post<INPUT : Model, OUTPUT : Model>(
-        route: Route,
-        val inputClass: KClass<INPUT>
-    ) : WrappedRoute<INPUT, OUTPUT>(route) {
-        inline fun doFirst(
-            crossinline body: suspend PipelineContext<Unit, ApplicationCall>.(INPUT) -> Unit
-        ) = Post<INPUT, OUTPUT>(
-            route.apply {
-                handle {
-                    val input = call.receive(inputClass)
-                    body(input)
-                }
-            }, inputClass
-        )
+    inline operator fun <reified INPUT : Model, reified OUTPUT : Model> Post<INPUT, OUTPUT>.invoke(
+        crossinline block: Fun2Route<INPUT, OUTPUT>.() -> Unit
+    ) {
+        val newRoute = scope.route(path, method) {}
+        val context = object : Fun2Route<INPUT, OUTPUT> { override val routeBuilder = newRoute }
+        block(context)
+    }
+
+    inline operator fun <reified OUTPUT : Model> Get<OUTPUT>.invoke(
+        crossinline block: Fun1Route<OUTPUT>.() -> Unit
+    ) {
+        val newRoute = scope.route(path, method) {}
+        val context = object : Fun1Route<OUTPUT> { override val routeBuilder = newRoute }
+        block(context)
     }
 }
 
-inline fun <reified INPUT : Model, reified OUTPUT : Model> RoutingScope.handleRequest(
-    request: Post<INPUT, OUTPUT>
-) = WrappedRoute.Post<INPUT, OUTPUT>(routeContext.route(request.path, HttpMethod.Post) {}, INPUT::class)
+private fun Route.routingScope() = RouteConfigurationScope(this)
 
-inline fun <reified OUTPUT : Model> RoutingScope.handleRequest(
-    request: Get<OUTPUT>
-) = WrappedRoute.Get<OUTPUT>(routeContext.route(request.path, HttpMethod.Get) {})
-
-fun Route.routingScope() = RoutingScope(this)
-class RoutingScope(val routeContext: Route) : RouteContract<HttpRequest<out Model, out Model>> by Routes
-fun Application.configureRoutes(block: RoutingScope.() -> Unit) {
+fun Application.configureRoutes(block: RouteConfigurationScope.() -> Unit) {
     routing {
         block(routingScope())
     }

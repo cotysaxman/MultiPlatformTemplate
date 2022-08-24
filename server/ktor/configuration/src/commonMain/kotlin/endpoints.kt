@@ -1,11 +1,14 @@
 package com.exawizards.multiplatform_template.server.ktor.configuration
 
-sealed interface HttpRequest<T : Model, S : Model> {
+interface HttpRequest<T : Model, S : Model> {
     val path: String
 }
 
-interface Get<T : Model> : HttpRequest<None, T>
-interface Post<T : Model, S: Model> : HttpRequest<T, S>
+interface Provider<T : Model>
+interface Receiver<T : Model>
+interface NonReceiver
+interface Get<T : Model> : HttpRequest<None, T>, Provider<T>, NonReceiver
+interface Post<T : Model, S: Model> : HttpRequest<T, S>, Provider<S>, Receiver<T>
 
 interface RouteContract<T> {
     val root: T
