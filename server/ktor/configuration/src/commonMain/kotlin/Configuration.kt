@@ -8,22 +8,10 @@ object Configuration {
 //    const val host: String = "10.0.2.2" // required for Android runs!
 }
 
-object Routes : RouteContract<HttpRequest<out Model, out Model>> {
-    override val root = get<PlainText>("/")
-    override val todoList = get<TodoList>("/items")
-    override val addItem = post<TodoItem, TodoList>("/items")
-
-    private inline fun <reified OUTPUT : Model> get(
-        path: String
-    ) = object : Get<OUTPUT> {
-        override val path = path
-    }
-
-    private inline fun <reified INPUT : Model, reified  OUTPUT : Model> post(
-        path: String
-    ) = object : Post<INPUT, OUTPUT> {
-        override val path = path
-    }
+object Routes : RoutesDsl {
+    val root = get<PlainText>("/")
+    val todoList = get<TodoList>("/items")
+    val addItem = post<TodoItem, TodoList>("/items")
 }
 
 
