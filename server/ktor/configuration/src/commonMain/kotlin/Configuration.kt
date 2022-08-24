@@ -14,7 +14,6 @@ object Routes : RoutesDsl {
     val addItem = post<TodoItem, TodoList>("/items")
 }
 
-
 sealed class Model
 @Serializable
 data class TodoItem(val title: String) : Model()
@@ -22,4 +21,3 @@ data class TodoItem(val title: String) : Model()
 data class TodoList(val items: List<TodoItem>) : Model()
 @Serializable
 data class PlainText(val content: String) : Model()
-object None : Model()

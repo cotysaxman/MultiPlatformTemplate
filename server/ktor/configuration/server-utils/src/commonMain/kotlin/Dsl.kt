@@ -8,20 +8,17 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
 
-interface RouteWrapper { val routeBuilder: Route }
-interface Fun2Route<IN : Model, OUT : Model> : Fun0Route<OUT>, Receiver<IN>
-interface Fun1Route<OUT : Model> : Fun0Route<OUT>, NonReceiver
-interface Fun0Route<OUT : Model> : RouteWrapper, Provider<OUT>
+interface RouteWrapper<IN, OUT> { val routeBuilder: Route }
 
 class RouteConfigurationScope(val scope: Route) {
-    inline fun <reified OUTPUT : Model> Fun1Route<OUTPUT>.doFirst(
+    inline fun <reified OUTPUT : Model> RouteWrapper<Unit, OUTPUT>.doFirst(
         crossinline block: PipelineInterceptor<Unit, ApplicationCall>
     ) = apply { routeBuilder.apply { handle { block(Unit) } } }
 
     inline fun <
         reified INPUT : Model,
         reified OUTPUT : Model
-    > Fun2Route<INPUT, OUTPUT>.doFirst(
+    > RouteWrapper<INPUT, OUTPUT>.doFirst(
         crossinline body: suspend PipelineContext<Unit, ApplicationCall>.(INPUT) -> Unit
     ) = apply {
         routeBuilder.apply {
@@ -32,7 +29,7 @@ class RouteConfigurationScope(val scope: Route) {
         }
     }
 
-    inline fun <reified OUTPUT : Model> Fun0Route<OUTPUT>.respondWith(
+    inline fun <reified OUTPUT : Model> RouteWrapper<*, OUTPUT>.respondWith(
         crossinline responseProvider: suspend () -> OUTPUT
     ) = apply {
         routeBuilder.apply {
@@ -42,19 +39,11 @@ class RouteConfigurationScope(val scope: Route) {
         }
     }
 
-    inline operator fun <reified INPUT : Model, reified OUTPUT : Model> Post<INPUT, OUTPUT>.invoke(
-        crossinline block: Fun2Route<INPUT, OUTPUT>.() -> Unit
+    inline operator fun <reified INPUT, reified OUTPUT> HttpRequest<INPUT, OUTPUT>.invoke(
+        crossinline block: RouteWrapper<INPUT, OUTPUT>.() -> Unit
     ) {
         val newRoute = scope.route(path, method) {}
-        val context = object : Fun2Route<INPUT, OUTPUT> { override val routeBuilder = newRoute }
-        block(context)
-    }
-
-    inline operator fun <reified OUTPUT : Model> Get<OUTPUT>.invoke(
-        crossinline block: Fun1Route<OUTPUT>.() -> Unit
-    ) {
-        val newRoute = scope.route(path, method) {}
-        val context = object : Fun1Route<OUTPUT> { override val routeBuilder = newRoute }
+        val context = object : RouteWrapper<INPUT, OUTPUT> { override val routeBuilder = newRoute }
         block(context)
     }
 }
