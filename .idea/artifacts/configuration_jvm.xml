@@ -1,8 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="configuration-jvm">
-    <output-path>$PROJECT_DIR$/server/ktor/configuration/build/libs</output-path>
-    <root id="archive" name="configuration-jvm.jar">
-      <element id="module-output" name="MultiPlatformTemplate.server.ktor.configuration.jvmMain" />
-    </root>
+    <output-path>$PROJECT_DIR$/common/configuration/build/libs</output-path>
+    <root id="archive" name="configuration-jvm.jar" />
   </artifact>
 </component>

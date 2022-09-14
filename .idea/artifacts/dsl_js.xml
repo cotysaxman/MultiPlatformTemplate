@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="dsl-js">
+    <output-path>$PROJECT_DIR$/client/common/ktor-client/dsl/build/libs</output-path>
+    <root id="archive" name="dsl-js.jar" />
+  </artifact>
+</component>
