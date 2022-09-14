@@ -8,8 +8,9 @@ import com.exawizards.multiplatform_template.server.ktor.configuration.*
 import com.exawizards.multiplatform_template.server.ktor.configuration.server_utils.configureRoutes
 import io.ktor.server.application.*
 
-fun Application.mainModule() {
-    val storage = Storage()
+fun Application.mainModule(
+    storage: Storage = Storage()
+) {
     suspend fun addItem(item: TodoItem) = suspend { storage.add(item) }()
     suspend fun getList(): TodoList = suspend { storage.getTodoList() }()
 
