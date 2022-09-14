@@ -1,6 +1,6 @@
-package com.exawizards.multiplatform_template.server.ktor.client.js
+package com.exawizards.multiplatform_template.ktor_client.js
 
-import com.exawizards.multiplatform_template.server.ktor.configuration.client_utils.getClient
+import com.exawizards.multiplatform_template.ktor_client.dsl.getClient
 import io.ktor.client.engine.js.*
 
 val client = getClient(Js)

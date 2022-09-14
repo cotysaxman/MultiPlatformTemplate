@@ -1,6 +1,11 @@
-package com.exawizards.multiplatform_template.server.ktor.configuration
+package com.exawizards.multiplatform_template.configuration
 
-import kotlinx.serialization.Serializable
+import com.exawizards.multiplatform_template.configuration.dsl.RoutesDsl
+import com.exawizards.multiplatform_template.configuration.dsl.get
+import com.exawizards.multiplatform_template.configuration.dsl.post
+import com.exawizards.multiplatform_template.configuration.models.PlainText
+import com.exawizards.multiplatform_template.configuration.models.TodoItem
+import com.exawizards.multiplatform_template.configuration.models.TodoList
 
 object Configuration {
     const val port: Int = 8081
@@ -13,11 +18,3 @@ object Routes : RoutesDsl {
     val todoList = get<TodoList>("/items")
     val addItem = post<TodoItem, TodoList>("/items")
 }
-
-sealed class Model
-@Serializable
-data class TodoItem(val title: String) : Model()
-@Serializable
-data class TodoList(val items: List<TodoItem>) : Model()
-@Serializable
-data class PlainText(val content: String) : Model()

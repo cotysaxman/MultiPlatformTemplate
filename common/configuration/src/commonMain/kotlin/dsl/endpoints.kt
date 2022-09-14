@@ -1,4 +1,6 @@
-package com.exawizards.multiplatform_template.server.ktor.configuration
+package com.exawizards.multiplatform_template.configuration.dsl
+
+import com.exawizards.multiplatform_template.configuration.models.Model
 
 interface HttpRequest<T, S> {
     val path: String

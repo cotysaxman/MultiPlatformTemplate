@@ -1,11 +1,13 @@
 package com.exawizards.multiplatform_template.server.ktor.cio.plugins
 
+import com.exawizards.multiplatform_template.configuration.Routes.root
+import com.exawizards.multiplatform_template.configuration.Routes.todoList
+import com.exawizards.multiplatform_template.configuration.Routes.addItem
+import com.exawizards.multiplatform_template.configuration.models.PlainText
+import com.exawizards.multiplatform_template.configuration.models.TodoItem
+import com.exawizards.multiplatform_template.configuration.models.TodoList
 import com.exawizards.multiplatform_template.platform_utils.getPlatformName
-import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.root
-import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.todoList
-import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.addItem
-import com.exawizards.multiplatform_template.server.ktor.configuration.*
-import com.exawizards.multiplatform_template.server.ktor.configuration.server_utils.configureRoutes
+import com.exawizards.multiplatform_template.server.ktor.dsl.*
 import io.ktor.server.application.*
 
 fun Application.mainModule(

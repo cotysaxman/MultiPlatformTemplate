@@ -1,7 +1,10 @@
-package com.exawizards.multiplatform_template.server.ktor.configuration.client_utils
+package com.exawizards.multiplatform_template.ktor_client.dsl
 
-import com.exawizards.multiplatform_template.server.ktor.configuration.*
-import com.exawizards.multiplatform_template.server.ktor.configuration.HttpRequest
+import com.exawizards.multiplatform_template.configuration.*
+import com.exawizards.multiplatform_template.configuration.dsl.Get
+import com.exawizards.multiplatform_template.configuration.dsl.Post
+import com.exawizards.multiplatform_template.configuration.dsl.HttpRequest
+import com.exawizards.multiplatform_template.configuration.models.Model
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.*

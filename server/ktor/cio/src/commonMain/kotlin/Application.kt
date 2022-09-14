@@ -1,6 +1,6 @@
 package com.exawizards.multiplatform_template.server.ktor.cio
 
-import com.exawizards.multiplatform_template.server.ktor.configuration.Configuration
+import com.exawizards.multiplatform_template.configuration.Configuration
 import com.exawizards.multiplatform_template.server.ktor.cio.plugins.mainModule
 import io.ktor.http.*
 import io.ktor.server.application.install

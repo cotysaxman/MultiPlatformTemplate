@@ -1,6 +1,7 @@
-package com.exawizards.multiplatform_template.server.ktor.configuration.server_utils
+package com.exawizards.multiplatform_template.server.ktor.dsl
 
-import com.exawizards.multiplatform_template.server.ktor.configuration.*
+import com.exawizards.multiplatform_template.configuration.dsl.*
+import com.exawizards.multiplatform_template.configuration.models.*
 import io.ktor.http.HttpMethod
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -12,8 +13,8 @@ interface RouteWrapper<IN, OUT> { val routeBuilder: Route }
 
 class RouteConfigurationScope(val scope: Route) {
     inline fun <reified OUTPUT : Model> RouteWrapper<Unit, OUTPUT>.doFirst(
-        crossinline block: PipelineInterceptor<Unit, ApplicationCall>
-    ) = apply { routeBuilder.apply { handle { block(Unit) } } }
+        crossinline block: suspend PipelineContext<Unit, ApplicationCall>.() -> Unit
+    ) = apply { routeBuilder.apply { handle { block() } } }
 
     inline fun <
         reified INPUT : Model,

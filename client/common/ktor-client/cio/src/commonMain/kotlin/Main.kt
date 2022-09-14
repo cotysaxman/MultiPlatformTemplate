@@ -1,6 +1,6 @@
-package com.exawizards.multiplatform_template.server.ktor.client.cio
+package com.exawizards.multiplatform_template.ktor_client.cio
 
-import com.exawizards.multiplatform_template.server.ktor.configuration.client_utils.getClient
+import com.exawizards.multiplatform_template.ktor_client.dsl.getClient
 import io.ktor.client.engine.cio.*
 
 val client = getClient(CIO)

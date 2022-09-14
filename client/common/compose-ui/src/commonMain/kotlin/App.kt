@@ -2,15 +2,15 @@ package com.exawizards.multiplatform_template.compose_ui
 
 import androidx.compose.foundation.layout.Column
 import com.exawizards.multiplatform_template.platform_utils.getPlatformName
-import com.exawizards.multiplatform_template.server.ktor.client.cio.client
-import com.exawizards.multiplatform_template.server.ktor.configuration.TodoItem
-import com.exawizards.multiplatform_template.server.ktor.configuration.TodoList
-import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.addItem
-import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.root
-import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.todoList
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import com.exawizards.multiplatform_template.configuration.Routes.addItem
+import com.exawizards.multiplatform_template.configuration.Routes.root
+import com.exawizards.multiplatform_template.configuration.Routes.todoList
+import com.exawizards.multiplatform_template.configuration.models.TodoItem
+import com.exawizards.multiplatform_template.configuration.models.TodoList
+import com.exawizards.multiplatform_template.ktor_client.cio.client
 
 @Composable
 fun App() {

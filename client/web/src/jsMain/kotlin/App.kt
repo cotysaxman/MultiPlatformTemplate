@@ -1,11 +1,11 @@
 import androidx.compose.runtime.*
 import com.exawizards.multiplatform_template.platform_utils.getPlatformName
-import com.exawizards.multiplatform_template.server.ktor.client.js.client
-import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.addItem
-import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.root
-import com.exawizards.multiplatform_template.server.ktor.configuration.Routes.todoList
-import com.exawizards.multiplatform_template.server.ktor.configuration.TodoItem
-import com.exawizards.multiplatform_template.server.ktor.configuration.TodoList
+import com.exawizards.multiplatform_template.ktor_client.js.client
+import com.exawizards.multiplatform_template.configuration.Routes.addItem
+import com.exawizards.multiplatform_template.configuration.Routes.root
+import com.exawizards.multiplatform_template.configuration.Routes.todoList
+import com.exawizards.multiplatform_template.configuration.models.TodoItem
+import com.exawizards.multiplatform_template.configuration.models.TodoList
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.padding
 import org.jetbrains.compose.web.css.px
