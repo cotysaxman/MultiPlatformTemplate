@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 val ktorVersion = project.properties["ktor_version"] as String
+val serializationJsonVersion: String by project
 
 plugins {
     kotlin("multiplatform")
@@ -29,13 +30,19 @@ android {
 kotlin {
     jvm()
     android()
+    js(IR) {
+        browser()
+    }
     nativeTarget("native")
 
     sourceSets {
         named("commonMain") {
             dependencies {
-                api(project(":server:ktor:configuration:client-utils"))
-                implementation(ktorClientDependency("cio", ktorVersion))
+                api(project(":common:configuration"))
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationJsonVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation(ktorClientDependency("core", ktorVersion))
+                api(ktorClientDependency("content-negotiation", ktorVersion))
             }
         }
     }
@@ -49,6 +56,5 @@ fun ktorClientDependency(
 fun KotlinMultiplatformExtension.nativeTarget(name: String) = when (System.getProperty("os.name")) {
     "Mac OS X" -> macosX64(name)
     "Linux" -> linuxX64(name)
-    // Other supported targets are listed here: https://ktor.io/docs/native-server.html#targets
     else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
 }

@@ -12,21 +12,23 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/android" />
+            <option value="$PROJECT_DIR$/client" />
+            <option value="$PROJECT_DIR$/client/android" />
+            <option value="$PROJECT_DIR$/client/common" />
+            <option value="$PROJECT_DIR$/client/common/compose-ui" />
+            <option value="$PROJECT_DIR$/client/common/ktor-client" />
+            <option value="$PROJECT_DIR$/client/common/ktor-client/cio" />
+            <option value="$PROJECT_DIR$/client/common/ktor-client/dsl" />
+            <option value="$PROJECT_DIR$/client/common/ktor-client/js" />
+            <option value="$PROJECT_DIR$/client/desktop" />
+            <option value="$PROJECT_DIR$/client/web" />
             <option value="$PROJECT_DIR$/common" />
-            <option value="$PROJECT_DIR$/common/compose-ui" />
+            <option value="$PROJECT_DIR$/common/configuration" />
             <option value="$PROJECT_DIR$/common/platform-utils" />
-            <option value="$PROJECT_DIR$/desktop" />
             <option value="$PROJECT_DIR$/server" />
             <option value="$PROJECT_DIR$/server/ktor" />
             <option value="$PROJECT_DIR$/server/ktor/cio" />
-            <option value="$PROJECT_DIR$/server/ktor/client" />
-            <option value="$PROJECT_DIR$/server/ktor/client/cio" />
-            <option value="$PROJECT_DIR$/server/ktor/client/js" />
-            <option value="$PROJECT_DIR$/server/ktor/configuration" />
-            <option value="$PROJECT_DIR$/server/ktor/configuration/client-utils" />
-            <option value="$PROJECT_DIR$/server/ktor/configuration/server-utils" />
-            <option value="$PROJECT_DIR$/web" />
+            <option value="$PROJECT_DIR$/server/ktor/dsl" />
           </set>
         </option>
       </GradleProjectSettings>

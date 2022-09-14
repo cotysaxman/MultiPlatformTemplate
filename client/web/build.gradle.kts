@@ -25,7 +25,7 @@ kotlin {
         named("jsMain") {
             dependencies {
                 implementation(project(":common:platform-utils"))
-                implementation(project(":server:ktor:client:js"))
+                implementation(project(":client:common:ktor-client:js"))
                 implementation(compose.runtime)
                 implementation(compose.web.core)
             }

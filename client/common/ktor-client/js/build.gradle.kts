@@ -12,7 +12,7 @@ kotlin {
     sourceSets {
         named("commonMain") {
             dependencies {
-                api(project(":server:ktor:configuration:client-utils"))
+                api(project(":client:common:ktor-client:dsl"))
                 implementation(ktorClientDependency("js", ktorVersion))
             }
         }

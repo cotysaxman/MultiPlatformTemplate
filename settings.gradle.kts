@@ -29,14 +29,14 @@ rootProject.apply {
 
 include(
     ":common:platform-utils",
-    ":common:compose-ui",
-    ":android",
-    ":desktop",
-    ":web",
+    ":client:common:compose-ui",
+    ":client:android",
+    ":client:desktop",
+    ":client:web",
     ":server:ktor:cio",
-    ":server:ktor:client:cio",
-    ":server:ktor:client:js",
-    ":server:ktor:configuration",
-    ":server:ktor:configuration:client-utils",
-    ":server:ktor:configuration:server-utils",
+    ":client:common:ktor-client:cio",
+    ":client:common:ktor-client:js",
+    ":common:configuration",
+    ":client:common:ktor-client:dsl",
+    ":server:ktor:dsl",
 )

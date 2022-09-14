@@ -42,7 +42,7 @@ dependencies {
     val activityComposeVersion: String by project
     val composeAndroidxVersion: String by project
 
-    implementation(project(":common:compose-ui"))
+    implementation(project(":client:common:compose-ui"))
     implementation("androidx.activity:activity-compose:$activityComposeVersion")
 
     implementation("androidx.compose.ui:ui-tooling:$composeAndroidxVersion")

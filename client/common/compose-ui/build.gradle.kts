@@ -14,7 +14,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":common:platform-utils"))
-                api(project(":server:ktor:client:cio"))
+                api(project(":client:common:ktor-client:cio"))
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)

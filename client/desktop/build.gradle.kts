@@ -16,7 +16,7 @@ kotlin {
     sourceSets {
         named("jvmMain") {
             dependencies {
-                implementation(project(":common:compose-ui"))
+                implementation(project(":client:common:compose-ui"))
                 implementation(compose.desktop.currentOs)
             }
         }

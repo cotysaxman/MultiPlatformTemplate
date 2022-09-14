@@ -15,7 +15,7 @@ kotlin {
         named("commonMain") {
             dependencies {
                 implementation(project(":common:platform-utils"))
-                implementation(project(":server:ktor:configuration"))
+                implementation(project(":common:configuration"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationJsonVersion")
                 implementation(ktorServerDependency("core", ktorVersion))
             }
