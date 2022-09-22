@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.testTag
 
 @Composable
 fun AddNewItem(addItem: (String) -> Unit) {
@@ -16,7 +17,8 @@ fun AddNewItem(addItem: (String) -> Unit) {
         mutableStateOf("")
     }
     TextField(
-        itemToAdd,
+        modifier = Modifier.testTag("addItemTextField"),
+        value = itemToAdd,
         label = { AddItemLabel() },
         onValueChange = { itemToAdd = it },
         trailingIcon = {
@@ -41,6 +43,7 @@ private fun AddItemButton(
     val enabled = itemText.isNotBlank()
     val icon = Icons.Filled.Add
     IconButton(
+        modifier = Modifier.testTag("addItemButton"),
         onClick = onClickedButton,
         enabled = enabled
     ) {

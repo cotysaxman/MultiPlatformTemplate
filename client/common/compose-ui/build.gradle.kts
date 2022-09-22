@@ -18,12 +18,12 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
-                api(compose.ui)
             }
         }
 
         val desktopMain by getting {
             dependencies {
+                implementation(compose.desktop.currentOs)
                 implementation(compose.preview)
                 implementation(compose.uiTooling)
             }
@@ -31,16 +31,22 @@ kotlin {
 
         val androidMain by getting {
             dependencies {
-                val appCompatVersion: String by project
                 val composeAndroidxVersion: String by project
 
-                api("androidx.appcompat:appcompat:$appCompatVersion")
-                api("androidx.core:core-ktx:1.8.0")
                 api("androidx.compose.runtime:runtime:$composeAndroidxVersion")
                 api("androidx.compose.foundation:foundation:$composeAndroidxVersion")
                 api("androidx.compose.material:material:$composeAndroidxVersion")
-                api("androidx.compose.ui:ui:$composeAndroidxVersion")
                 implementation("androidx.compose.ui:ui-tooling:$composeAndroidxVersion")
+            }
+        }
+
+        val androidAndroidTest by getting {
+            val composeAndroidxVersion: String by project
+
+            dependencies {
+                implementation("androidx.compose.ui:ui-test:$composeAndroidxVersion")
+                implementation("androidx.compose.ui:ui-test-junit4:$composeAndroidxVersion")
+                implementation("androidx.compose.ui:ui-test-manifest:$composeAndroidxVersion")
             }
         }
     }
@@ -54,6 +60,7 @@ android {
     defaultConfig {
         minSdk = 28
         targetSdk = 31
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     @Suppress("UnstableApiUsage")
