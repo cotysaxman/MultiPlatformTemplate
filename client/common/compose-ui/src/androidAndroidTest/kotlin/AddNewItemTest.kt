@@ -14,11 +14,11 @@ class AddNewItemTest {
     @JvmField
     val composeTestRule: ComposeContentTestRule = createComposeRule()
 
-    var textState = "unmodified"
+    var textState: String? = null
 
     @Before
     fun before() {
-        textState = "unmodified"
+        textState = null
 
         composeTestRule.setContent {
             AddNewItem {
@@ -27,7 +27,8 @@ class AddNewItemTest {
         }
     }
 
-    @Test fun addNewItem() {
+    @Test
+    fun addItemButton_calls_passed_lambda_with_text_in_addItemTextField() {
         composeTestRule.onNodeWithTag("addItemTextField")
             .performTextInput("new value")
         composeTestRule.onNodeWithTag("addItemButton")
